@@ -1,0 +1,37 @@
+Ver ObjectAsMethodWrapper
+Ejemplo:
+		TestRunner >> collectCoverageFor: methods
+			| wrappers suite |
+
+			"*Wrappeamos los metodos"
+
+			wrappers := methods collect: [ :each | TestCoverage on: each ]. 
+			
+			suite := self
+				resetResult;
+				suiteForAllSelected.
+			
+			"*Instalamos los wrappers"
+
+			[ wrappers do: [ :each | each install ]. 
+
+			 "*Ejecutamos los metodos y desinstalamos los wrappers"
+
+			[ self runSuite: suite ] ensure: [ wrappers do: [ :each | each uninstall ] ] ] valueUnpreemptively.
+			
+			"*Descartamos los metodos que se ejecutaron "
+
+			wrappers := wrappers reject: [ :each | each hasRun ]. 
+			
+			wrappers isEmpty
+				ifTrue: 
+					[ UIManager default inform: 'Congratulations. Your tests cover all code under analysis.' ]
+				ifFalse: 
+					[ 
+					| ml |
+					ml := MessageList new.
+					(wrappers collect: [ :each | ml addMethodReference: each reference ]).
+					(Smalltalk tools messageList 
+						on: ml
+						named: 'Not Covered Code (' , (100 - (100 * wrappers size // methods size)) printString , '% Code Coverage)') open ].
+				self saveResultInHistory
