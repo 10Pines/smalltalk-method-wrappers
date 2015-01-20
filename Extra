@@ -1,0 +1,9 @@
+
+	La implementación oficial de MethodWrapper: browsear MwMethodWrapper en pharo.
+
+	Bibliografía
+-----------------------------------------------
+
+* "Wrappers to the  Rescue" de John Brant
+* "Pharo by Example" sección 14.7 ," Los objetos como métodos wrappers"
+	
