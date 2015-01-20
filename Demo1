@@ -1,0 +1,27 @@
+
+		"Nos hacemos pasar por un CompiledMethod"
+"-----------------------------------------------------------------------------------------"
+
+	"
+	Cuando agregamos el objeto en reemplazo del CompiledMethod, la VM se da cuenta de que no es un CM
+	por lo que le envia a este objeto el mensaje run: with: in: , y lo que hace ObjectsAsMethodsExample
+	es delegar en si mismo el envio del mensaje con el mismo selector que el que se encontraba en el method
+	dictionary asociado al objeto.
+	"
+
+"VER ObjectsAsMethodExample para ver la implementación de answer42"
+
+"MNU"
+MWDemo new answer42.
+
+"Asociamos el objeto al selector en el method dictionary"
+MWDemo methodDict at: #answer42 put: ObjectsAsMethodsExample new.
+
+"Ahora si lo entiende, retorna 42"
+MWDemo new answer42.
+
+"Lo removemos"
+MWDemo methodDict removeKey: #answer42 ifAbsent: []. 
+
+"MNU otra vez"
+MWDemo new answer42.
